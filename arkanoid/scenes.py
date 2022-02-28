@@ -18,7 +18,8 @@ class Partida(Escena):
         self.bola = Bola(self.pantalla, self.pantalla.get_width()//2, 
                         self.pantalla.get_height()//2)
         self.raqueta = Raqueta(self.pantalla, self.pantalla.get_width()//2, 
-                        self.pantalla.get_height()-30, 100, 20)
+                        self.pantalla.get_height()-30)
+        self.fondo = pg.image.load("./resources/images/background.jpg")
         self.ladrillos = []
         self.todos = []
         self.reset()
@@ -67,7 +68,8 @@ class Partida(Escena):
                             self.raqueta.vx = 0
                     """
                 
-                self.pantalla.fill((255, 0, 0))
+                self.pantalla.blit(self.fondo, (0, 0))
+
                 for objeto in self.todos:
                     objeto.mover()
 
@@ -110,7 +112,9 @@ class GameOver(Escena):
 
             self.pantalla.fill((30, 30, 255))
             texto = self.fuente.render("GAME OVER", True, (255, 255, 0))
+            rectexto = texto.get_rect()
 
-            self.pantalla.blit(texto, (10, 10))
+            self.pantalla.blit(texto, ((self.pantalla.get_width() - rectexto.width) // 2, 
+                                    (self.pantalla.get_height() - rectexto.height) // 2))
 
             pg.display.flip()

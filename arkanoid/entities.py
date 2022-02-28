@@ -60,12 +60,31 @@ class Ladrillo(Vigneta):
         return False
     
 class Raqueta(Vigneta):
-    def __init__(self, padre, x, y, ancho, alto, color =(255, 255, 0)):
-        super().__init__(padre, x, y, ancho, alto, color)
+    def __init__(self, padre, x, y, color =(255, 255, 0)):
+        self.images = []
+        for i in range(3):
+            self.images.append(pg.image.load(f"./resources/images/electric0{i}.png"))
+        self.imagen_activa = 0
+        self.frecuencia_cambio = 5
+        self.contador_frames = 0
+        self.imagen = self.images[self.imagen_activa]
+        self.rect = self.imagen.get_rect()
+        super().__init__(padre, x, y, self.rect.width, self.rect.height, color)
         self.vx = 5
 
     def dibujar(self):
-        pg.draw.rect(self.padre, self.color, (self.x, self.y, self.ancho, self.alto))
+        self.padre.blit(self.images[self.imagen_activa], (self.x, self.y))
+
+        self.contador_frames += 1
+        if self.contador_frames == self.frecuencia_cambio:
+            self.imagen_activa += 1
+            if self.imagen_activa >= len(self.images):
+                self.imagen_activa = 0
+            
+            self.contador_frames = 0
+        
+        #self.imagen_activa = (self.imagen_activa +1) % len(self.images)
+        #pg.draw.rect(self.padre, self.color, (self.x, self.y, self.ancho, self.alto))
 
     def mover(self):
         teclas = pg.key.get_pressed()
